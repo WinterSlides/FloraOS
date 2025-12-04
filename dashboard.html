@@ -1,0 +1,144 @@
+<div class="dashboard-grid">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .dashboard-main { grid-column: span 3; }
+        .dashboard-side { grid-column: span 1; display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .kpi-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .kpi-title { font-size: 0.875rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-value { font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0.5rem 0; }
+        .kpi-trend { font-size: 0.875rem; display: flex; align-items: center; gap: 0.25rem; }
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--danger-color); }
+
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .section-title { font-size: 1.1rem; font-weight: 700; }
+        
+        .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .action-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+            gap: 0.5rem; color: var(--text-main);
+        }
+        .action-btn:hover { border-color: var(--primary-color); color: var(--primary-color); transform: translateY(-2px); }
+        .action-btn i { font-size: 1.5rem; }
+
+        .list-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .list-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem; background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+        }
+        .item-left { display: flex; align-items: center; gap: 1rem; }
+        .item-icon { 
+            width: 40px; height: 40px; background: var(--primary-light); color: var(--primary-dark);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .dashboard-main, .dashboard-side { grid-column: span 1; }
+        }
+    </style>
+
+    <!-- TOP KPI ROW -->
+    <div class="kpi-card">
+        <span class="kpi-title">Active Batches</span>
+        <div class="kpi-value" id="kpi-batches">0</div>
+        <span class="kpi-trend trend-up"><i class="ph ph-trend-up"></i> Production Active</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-title">Plants in Culture</span>
+        <div class="kpi-value" id="kpi-plants">0</div>
+        <span class="kpi-trend"><i class="ph ph-plant"></i> Estimated count</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-title">Contamination Rate</span>
+        <div class="kpi-value" id="kpi-contam">0%</div>
+        <span class="kpi-trend trend-down"><i class="ph ph-trend-down"></i> Last 30 days</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-title">Pending Orders</span>
+        <div class="kpi-value" id="kpi-orders">0</div>
+        <span class="kpi-trend trend-up" style="color: var(--warning-color);"><i class="ph ph-clock"></i> Needs Action</span>
+    </div>
+
+    <!-- MAIN AREA -->
+    <div class="dashboard-main">
+        
+        <!-- Charts Row -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="section-header">
+                <h3 class="section-title">Production Overview</h3>
+                <select style="padding: 5px; border-radius: 4px; border:1px solid var(--border-color);">
+                    <option>Last 7 Days</option>
+                    <option>Last 30 Days</option>
+                </select>
+            </div>
+            <div id="production-chart" style="height: 200px;"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <h3 class="section-title" style="margin-bottom: 1rem;">Recent Lab Activity</h3>
+        <div class="list-group" id="recent-activity-list">
+            <!-- Injected by JS -->
+            <div class="list-item" style="color: var(--text-muted); justify-content: center;">No recent activity</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR AREA -->
+    <div class="dashboard-side">
+        
+        <!-- Quick Actions -->
+        <div class="card">
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="action-grid" style="margin-top: 1rem;">
+                <button class="action-btn" onclick="App.loadPage('media-kitchen')">
+                    <i class="ph ph-flask"></i>
+                    <span>Make Media</span>
+                </button>
+                <button class="action-btn" onclick="App.loadPage('batch-management')">
+                    <i class="ph ph-plus-circle"></i>
+                    <span>New Batch</span>
+                </button>
+                <button class="action-btn" onclick="App.loadPage('inventory')">
+                    <i class="ph ph-package"></i>
+                    <span>Add Stock</span>
+                </button>
+                <button class="action-btn" onclick="App.loadPage('quality-control')">
+                    <i class="ph ph-warning-circle"></i>
+                    <span>Log Contam</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="card">
+            <h3 class="section-title">System Alerts</h3>
+            <div id="alerts-list" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                <!-- Alerts injected by JS -->
+            </div>
+        </div>
+
+        <!-- Storage Status -->
+        <div class="card">
+            <h3 class="section-title">Storage Capacity</h3>
+            <div style="margin-top: 1rem;" id="storage-chart"></div>
+        </div>
+
+    </div>
+</div>

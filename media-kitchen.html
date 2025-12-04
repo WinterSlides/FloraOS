@@ -1,0 +1,117 @@
+<div class="media-container" style="height: 100%; display: flex; flex-direction: column;">
+    <!-- Sub-Navigation -->
+    <div class="tabs" style="display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+        <button class="tab-btn active" onclick="MediaKitchen.switchTab('calculator')">Calculator</button>
+        <button class="tab-btn" onclick="MediaKitchen.switchTab('recipes')">Recipe Library</button>
+        <button class="tab-btn" onclick="MediaKitchen.switchTab('history')">Media Logs</button>
+    </div>
+
+    <style>
+        .tab-btn {
+            background: none; border: none; padding: 0.75rem 0; 
+            font-weight: 600; color: var(--text-muted); cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .split-view { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; height: 100%; }
+        
+        .recipe-card {
+            background: var(--bg-card); padding: 1rem; border: 1px solid var(--border-color);
+            border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+        }
+        .recipe-card:hover { border-color: var(--primary-color); }
+        
+        .ingredient-row {
+            display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);
+        }
+        .calc-input { font-size: 2rem; width: 150px; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 8px; text-align: center; }
+    </style>
+
+    <!-- TAB 1: CALCULATOR -->
+    <div id="tab-calculator" class="tab-content">
+        <div class="split-view">
+            <!-- Left: Inputs -->
+            <div class="card">
+                <h3 class="section-title"><i class="ph ph-flask"></i> Prepare Media</h3>
+                
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Select Recipe</label>
+                    <select id="calc-recipe-select" class="full-width" onchange="MediaKitchen.loadRecipeToCalc()">
+                        <option value="">-- Choose Base Medium --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="text-align: center; margin: 2rem 0;">
+                    <label>Target Volume (Liters)</label>
+                    <input type="number" id="calc-volume" class="calc-input" value="1.0" step="0.1" min="0.1" oninput="MediaKitchen.calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Vessels</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="number" id="calc-vessels" placeholder="e.g. 50" class="full-width">
+                        <select class="full-width" id="calc-vessel-type">
+                            <option value="tubes">Test Tubes (10ml)</option>
+                            <option value="jars">Glass Jars (50ml)</option>
+                            <option value="boxes">Magentha Boxes (100ml)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn-primary full-width" onclick="MediaKitchen.saveBatch()">
+                        <i class="ph ph-printer"></i> Log & Print Labels
+                    </button>
+                    <button class="icon-btn" style="border: 1px solid var(--border-color); border-radius: var(--radius); width: 50px;" title="Reset" onclick="MediaKitchen.resetCalc()">
+                        <i class="ph ph-arrow-counter-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Output -->
+            <div class="card" style="background: var(--bg-body);">
+                <h3 class="section-title">Ingredient List</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Scaled for <span id="disp-volume">1.0</span> Liters</p>
+                
+                <div id="calc-ingredients-list" style="background: var(--bg-card); border-radius: var(--radius); padding: 1rem;">
+                    <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Select a recipe to begin.</div>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-radius: var(--radius); font-size: 0.9rem;">
+                    <strong><i class="ph ph-warning"></i> pH Adjustment:</strong><br>
+                    Adjust to <strong>5.8</strong> using 1M KOH or HCl before adding Agar.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: RECIPES -->
+    <div id="tab-recipes" class="tab-content hidden">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <h3>Recipe Library</h3>
+            <button class="btn-primary"><i class="ph ph-plus"></i> New Recipe</button>
+        </div>
+        <div id="recipe-grid" class="dashboard-grid">
+            <!-- Recipes injected here -->
+        </div>
+    </div>
+
+    <!-- TAB 3: HISTORY -->
+    <div id="tab-history" class="tab-content hidden">
+        <h3>Media Production Log</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;" id="media-history-table">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 1rem;">Date</th>
+                    <th>Recipe</th>
+                    <th>Volume</th>
+                    <th>Batch Code</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- History injected here -->
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloraOS | Tissue Culture ERP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Using Phosphor Icons for a clean, scientific look (Client-side usage) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="FloraOS - Offline Tissue Culture Laboratory Management System">
+</head>
+<body>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="login-container">
+        <div class="login-box">
+            <div class="brand-logo-large">
+                <i class="ph ph-plant"></i> FloraOS
+            </div>
+            <p class="login-subtitle">Enterprise Tissue Culture Management</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>User Account</label>
+                    <select id="login-user-type">
+                        <option value="admin">Administrator</option>
+                        <option value="partner">Partner</option>
+                        <option value="worker">Lab Worker</option>
+                        <option value="viewer">Guest / Viewer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password / PIN</label>
+                    <input type="password" id="login-password" placeholder="Enter credentials..." required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-primary full-width">Initialize System</button>
+            </form>
+            <div id="login-message"></div>
+            <p class="version-tag">v1.0.0 | Offline-First Architecture</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP LAYOUT (Hidden until login) -->
+    <div id="app-layout" class="hidden">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <i class="ph ph-plant"></i> <span>FloraOS</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-category">CORE</div>
+                <a href="#" class="nav-item active" data-page="dashboard"><i class="ph ph-squares-four"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-page="productivity"><i class="ph ph-check-square"></i> Productivity</a>
+                <a href="#" class="nav-item" data-page="analytics"><i class="ph ph-chart-line-up"></i> Analytics</a>
+
+                <div class="nav-category">LABORATORY</div>
+                <a href="#" class="nav-item" data-page="media-kitchen"><i class="ph ph-flask"></i> Media Kitchen</a>
+                <a href="#" class="nav-item" data-page="stock-plants"><i class="ph ph-potted-plant"></i> Mother Plants</a>
+                <a href="#" class="nav-item" data-page="batch-management"><i class="ph ph-files"></i> Batch LIMS</a>
+                <a href="#" class="nav-item" data-page="lab-notebook"><i class="ph ph-notebook"></i> Notebook</a>
+                <a href="#" class="nav-item" data-page="quality-control"><i class="ph ph-shield-check"></i> QC & Contam</a>
+
+                <div class="nav-category">OPERATIONS</div>
+                <a href="#" class="nav-item" data-page="inventory"><i class="ph ph-warehouse"></i> Inventory ERP</a>
+                <a href="#" class="nav-item" data-page="equipment"><i class="ph ph-wrench"></i> Equipment</a>
+                <a href="#" class="nav-item" data-page="orders"><i class="ph ph-shopping-cart"></i> Procurement</a>
+                <a href="#" class="nav-item" data-page="shipments"><i class="ph ph-truck"></i> Shipments</a>
+
+                <div class="nav-category">SCIENCE & R&D</div>
+                <a href="#" class="nav-item" data-page="research"><i class="ph ph-microscope"></i> Experiments</a>
+                <a href="#" class="nav-item" data-page="genetics"><i class="ph ph-dna"></i> Genetics</a>
+                <a href="#" class="nav-item" data-page="cryobank"><i class="ph ph-snowflake"></i> Cryobank</a>
+                <a href="#" class="nav-item" data-page="diagnostics"><i class="ph ph-first-aid"></i> Diagnostics</a>
+
+                <div class="nav-category">BUSINESS</div>
+                <a href="#" class="nav-item" data-page="crm"><i class="ph ph-users"></i> CRM & Sales</a>
+                <a href="#" class="nav-item" data-page="finance"><i class="ph ph-currency-dollar"></i> Finance</a>
+                <a href="#" class="nav-item" data-page="docs"><i class="ph ph-file-pdf"></i> Documents</a>
+
+                <div class="nav-category">SYSTEM</div>
+                <a href="#" class="nav-item" data-page="safety"><i class="ph ph-warning"></i> Safety (SDS)</a>
+                <a href="#" class="nav-item" data-page="settings"><i class="ph ph-gear"></i> Settings</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini-profile">
+                    <div class="user-avatar" id="current-user-avatar">A</div>
+                    <div class="user-info">
+                        <span id="current-user-name">Admin</span>
+                        <span id="current-user-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main id="main-content">
+            <!-- TOP BAR -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button id="sidebar-toggle"><i class="ph ph-list"></i></button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                
+                <div class="top-bar-center">
+                    <div class="global-search">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" placeholder="Search batches, genetics, orders..." id="global-search-input">
+                    </div>
+                </div>
+
+                <div class="top-bar-right">
+                    <button class="icon-btn" title="Quick Add"><i class="ph ph-plus"></i></button>
+                    <button class="icon-btn" title="Notifications"><i class="ph ph-bell"></i><span class="badge">3</span></button>
+                    <button class="icon-btn" id="theme-toggle" title="Toggle Theme"><i class="ph ph-moon"></i></button>
+                    <button class="icon-btn logout-btn" id="logout-btn" title="Logout"><i class="ph ph-sign-out"></i></button>
+                </div>
+            </header>
+
+            <!-- DYNAMIC VIEW CONTAINER -->
+            <div id="view-container" class="view-container">
+                <!-- Content injected here by JS -->
+                <div class="loading-spinner">
+                    <i class="ph ph-spinner ph-spin"></i> Loading Module...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Core Utilities -->
+    <script src="js/utils.js"></script>
+    <script src="js/data-manager.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <!-- Shared Libraries (Mocked for Structure, will be files later) -->
+    <script src="js/charts.js"></script>
+    
+    <!-- Main App Logic -->
+    <script src="js/app.js"></script>
+
+    <!-- Module Scripts (Loaded on demand or upfront) -->
+    <!-- These will be generated in subsequent steps -->
+
+</body>
+</html>
