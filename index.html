@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseUrl = "https://hvvlwopmvtqikahbkmmi.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2dmx3b3BtdnRxaWthaGJrbW1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MjYwMDMsImV4cCI6MjA4MDQwMjAwM30.X-8Vt02g2sdAV1mIjAr8oy8loSri3FCMopEh_M--NQ8";
+
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+
   <!-- Sidebar Navigation -->
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -1558,4 +1568,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
